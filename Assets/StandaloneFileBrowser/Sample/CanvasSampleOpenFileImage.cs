@@ -60,7 +60,45 @@ public class CanvasSampleOpenFileImage : MonoBehaviour, IPointerDownHandler {
         Texture2D texture = new Texture2D(64, 64);
 
         texture = loader.texture;
-        TextureScale.Bilinear(texture, 256, 256);
-        GameObject.Find("Bottle_3").GetComponent<Renderer>().material.mainTexture = texture;
+        TextureScale.Bilinear(texture, 256, 75);
+
+        //Texture2D whatermarkTexture = Resources.Load("Captura") as Texture2D;
+        Texture2D texture2 = GameObject.Find("Bottle_3").GetComponent<Renderer>().material.mainTexture as Texture2D;
+        // Create a new 2x2 texture ARGB32 (32 bit with alpha) and no mipmaps
+        Texture2D texture3 = new Texture2D(256, 256, TextureFormat.ARGB32, false);
+        //whatermarkTexture.Resize(256, 50);
+        //whatermarkTexture.width = 250;
+
+        int contadorY = 0;
+        int contadorX = 0;
+        // set the pixel values
+        for (int x = texture3.width;  x > 0; x--)
+        {
+            for (int y = 0; y < texture3.height; y++)
+            {
+
+                texture3.SetPixel(x, y, texture2.GetPixel(x, y));
+                /*if (texture3.height / 2 > y && texture3.height / 2 - 100 < y)
+                {
+                    texture3.SetPixel(x, y, texture.GetPixel(x, contadorY));
+                    contadorY++;
+
+                }*/
+            }
+            contadorY = texture3.height / 2-50;
+            for (int y = texture.height; y >0 ; y--)
+            {
+
+                texture3.SetPixel(x, contadorY, texture.GetPixel(contadorX, y));
+                contadorY++;
+
+            }
+            contadorX++;
+
+        }
+        // Apply all SetPixel calls
+        texture3.Apply();
+        GameObject.Find("Bottle_3").GetComponent<Renderer>().material.mainTexture = texture3;
+
     }
 }
