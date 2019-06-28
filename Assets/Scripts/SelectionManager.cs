@@ -31,7 +31,6 @@ public class SelectionManager : MonoBehaviour
                 // the object identified
                 string nameMesh = hit.collider.name;
                 GameObject bottle = GameObject.Find(nameMesh);
-
                 if (nameMesh.Contains(nameBottle))
                 {
                     numberBottle = System.Int32.Parse(nameMesh.Split('_')[1]);
@@ -48,9 +47,11 @@ public class SelectionManager : MonoBehaviour
 
         string nameMesh = nameBottle + (numberBottle + direction).ToString();
         GameObject bottle = GameObject.Find(nameMesh);
+
         //if exist
         if (bottle != null)
         {
+
             //change position
             arrow.transform.position = new Vector3(bottle.transform.position.x, arrow.transform.position.y, arrow.transform.position.z);
             numberBottle = numberBottle + direction;
@@ -60,10 +61,16 @@ public class SelectionManager : MonoBehaviour
 
     public void NextStep()
     {
+        if(step!= 1)
+        {
+            return;
+        }
         panelStep1.SetActive(false);
         panelStep2.SetActive(true);
         string nameMesh = nameBottle + (numberBottle).ToString();
         GameObject bottle = GameObject.Find(nameMesh);
+        UniversalVar.Instance.Bottle = bottle;
+
         camera.transform.position = new Vector3(bottle.transform.position.x+0.25f, camera.transform.position.y, camera.transform.position.z+1.3f);
 
         step++;
@@ -80,6 +87,10 @@ public class SelectionManager : MonoBehaviour
 
     public void PrevStep()
     {
+        if (step != 2)
+        {
+            return;
+        }
         panelStep1.SetActive(true);
         panelStep2.SetActive(false);
         camera.transform.position = positionCamera;
