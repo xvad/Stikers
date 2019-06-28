@@ -95,12 +95,7 @@ public class OpenFileImage : MonoBehaviour, IPointerDownHandler {
             {
 
                 texture3.SetPixel(x, y, texture2.GetPixel(x, y));
-                /*if (texture3.height / 2 > y && texture3.height / 2 - 100 < y)
-                {
-                    texture3.SetPixel(x, y, texture.GetPixel(x, contadorY));
-                    contadorY++;
 
-                }*/
             }
             contadorY = (texture3.height / 2)+ newHeight;
             //Dibuja hacia arriba
@@ -114,12 +109,45 @@ public class OpenFileImage : MonoBehaviour, IPointerDownHandler {
             contadorX++;
 
         }
-        // Apply all SetPixel calls
+
+        if (UniversalVar.Instance.Bottle.name == "Bottle_4")
+        {
+            contadorY = 0;
+            contadorX = 0;
+            // set the pixel values
+            for (int x = texture3.width; x > 0; x--)
+            {
+                for (int y = 0; y < texture3.height; y++)
+                {
+
+                    texture3.SetPixel(x, y, texture2.GetPixel(x, y));
+
+                }
+                contadorY = (texture3.height / 2) + newHeight;
+                //Dibuja hacia arriba
+                for (int y = texture.height; y > 0 ; y--)
+                {
+
+                    texture3.SetPixel(x, contadorY, texture.GetPixel(contadorX, y));
+                    contadorY++;
+
+                }
+                contadorX++;
+
+            }
+        }
         texture3.Apply();
 
         UniversalVar.Instance.Bottle.GetComponent<Renderer>().material.mainTexture = texture3;
+        GameObject[] clones = GameObject.FindGameObjectsWithTag("clone");
+        clones[0].GetComponent<Renderer>().material.mainTexture = texture3;
+        clones[1].GetComponent<Renderer>().material.mainTexture = texture3;
 
     }
 
-    
+    void rotate(Texture2D photo)
+    {
+
+    }
+
 }

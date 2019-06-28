@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -30,9 +31,12 @@ public class SelectionManager : MonoBehaviour
             {
                 // the object identified
                 string nameMesh = hit.collider.name;
-                GameObject bottle = GameObject.Find(nameMesh);
                 if (nameMesh.Contains(nameBottle))
                 {
+                    GameObject bottle = GameObject.Find(nameMesh);
+
+                    Debug.Log(nameMesh);
+
                     numberBottle = System.Int32.Parse(nameMesh.Split('_')[1]);
                     //change position
                     arrow.transform.position = new Vector3(bottle.transform.position.x, arrow.transform.position.y, arrow.transform.position.z);
@@ -71,7 +75,11 @@ public class SelectionManager : MonoBehaviour
         GameObject bottle = GameObject.Find(nameMesh);
         UniversalVar.Instance.Bottle = bottle;
 
-        camera.transform.position = new Vector3(bottle.transform.position.x+0.25f, camera.transform.position.y, camera.transform.position.z+1.3f);
+        camera.transform.position = new Vector3(bottle.transform.position.x+0.35f, camera.transform.position.y, camera.transform.position.z+0.6f);
+        GameObject clone1 = Instantiate(bottle, new Vector3(bottle.transform.position.x + 0.2f, bottle.transform.position.y, bottle.transform.position.z), Quaternion.identity);
+        clone1.tag = "clone";
+        GameObject clone2  = Instantiate(bottle, new Vector3(bottle.transform.position.x - 0.2f, bottle.transform.position.y, bottle.transform.position.z), Quaternion.identity);
+        clone2.tag = "clone";
 
         step++;
         int children = bottlesContainer.transform.childCount;
@@ -90,6 +98,12 @@ public class SelectionManager : MonoBehaviour
         if (step != 2)
         {
             return;
+        }
+        GameObject.Find("OutputImage").GetComponent<RawImage>().texture = null;
+        var clones = GameObject.FindGameObjectsWithTag("clone");
+        foreach (GameObject clone in clones)
+        {
+            Destroy(clone);
         }
         panelStep1.SetActive(true);
         panelStep2.SetActive(false);
